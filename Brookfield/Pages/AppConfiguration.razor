@@ -1,0 +1,42 @@
+﻿@page "/"
+@inherits AppConfigutaionBase
+@inject NavigationManager urihelper;
+@using System.Data;
+
+<h3>AppConfiguration</h3>
+
+@if (appConfiguration == null)
+{
+    <p><em>Loading....</em></p>
+}
+else
+{
+    <SfGrid DataSource="@appConfiguration" GridLines="@GridLine.Both" AllowTextWrap="true" AllowResizing="true">
+        <GridColumns>
+            @foreach (DataColumn col in dtList.Columns)
+            {
+                <GridColumn Field=@col.ColumnName />
+            }
+            <GridColumn TextAlign="@TextAlign.Center" Width="70px">
+                <Template>
+                    @{
+                        string Xml = ((string)(context as IDictionary<string, object>)["Xml"]);
+                        string ConnectionString = ((string)(context as IDictionary<string, object>)["ConnectionString"]);
+                        string ScreenName = ((string)(context as IDictionary<string, object>)["ScreenName"]);
+                        <a href="#" @onclick="@(() => OnClick(ScreenName,ConnectionString,Xml))">
+                            Check
+                        </a>
+                    }
+                </Template>
+            </GridColumn>
+        </GridColumns>
+    </SfGrid>
+    
+    @code {
+        //...
+        void OnClick(string screen, string conn, string xml)
+        {          
+           urihelper.NavigateTo("/DynamicView/?xml=" + xml + "&ConnString=" + conn + "&Tital=" + screen);
+        }
+    }
+}
