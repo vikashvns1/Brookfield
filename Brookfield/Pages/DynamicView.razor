@@ -4,59 +4,60 @@
 @using Syncfusion.Blazor.Grids
 @inherits DynamicViewBase
 @using System.Dynamic
+@using Newtonsoft.Json;
+@using System.Collections.ObjectModel;
+
 
 <h3>@Tital</h3>
 
 @if (paramList != null)
 {
     int i = 0;
-    string name="u";
 
     <div>
-        
+
         @foreach (var item in paramList)
         {
-            <label>@item.Name</label>
-            <input type="@item.Type" class="input-group-sm" />
-                        i++;
-           
+            <label>@item.Label</label> <label> : </label>
+            
+            @*<input type="@item.Type" @bind="@item.Value" class="input-group-sm" />*@
+            <Syncfusion.Blazor.Inputs.SfTextBox Type="@item.Type" @bind-Value="@item.Value" Width="150px"></Syncfusion.Blazor.Inputs.SfTextBox>
+            i++;
         }
+        <SfButton Type="submit" @onclick="submitedata">Submit</SfButton>
 
-        @*<button type="submit" @onclick="submitedata">Submit</button>*@
 
         @code {
 
 
 
-            [Parameter]
-            public DataTable dt { get; set; }
+            //[Parameter]
+            //public DataTable dt { get; set; }
             string display = "d-none";
+            string displayMsg = "d-none";
 
-            //void submitedata()
-            //{
-            //    dt = GetUserList("", "", value[0], value[1], value[2]);
-            //    if (dt.Rows.Count > 0)
-            //    {
-            //        List<Models.UserInfo> studentList = new List<Models.UserInfo>();
-            //        for (int i = 0; i < dt.Rows.Count; i++)
-            //        {
-            //            Models.UserInfo student = new Models.UserInfo();
-            //            student.UserId = Convert.ToInt32(dt.Rows[i]["UserId"]);
-            //            student.FirstName = dt.Rows[i]["FirstName"].ToString();
-            //            student.LastName = dt.Rows[i]["LastName"].ToString();
-            //            student.UserName = dt.Rows[i]["UserName"].ToString();
-            //            student.Email = dt.Rows[i]["Email"].ToString();
-            //            student.Password = dt.Rows[i]["Password"].ToString();
-            //            student.CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"].ToString());
-            //            studentList.Add(student);
-            //        }
+            async Task submitedata()
+            {
 
-            //        UserInfo = studentList;
-            //        display = "";
-            //    }
-            //    else
-            //        display = "d-none";
-            //}
+                string jsonstring = string.Empty;
+                jsonstring = await dynamicAPIService.GetDatabyParam(paramList, connString, StoreProcedure, "Select");
+                var response = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
+
+                if (response.Count > 0)
+                {
+                    DynamicObject = null;
+                    dtEmployeeList = null;
+                    DynamicObject = response;
+                    dtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
+                    display = "";
+                    displayMsg = "d-none";
+                }
+                else
+                {
+                    display = "d-none";
+                    displayMsg = "";
+                }
+            }
 
         }
 
@@ -70,7 +71,7 @@
     }
     else
     {
-        <SfButton OnClick="ExcelExport" Content="Excel Export" CssClass="e-success"></SfButton> <SfButton CssClass="e-success" OnClick="PdfExport" Content="Pdf Export"></SfButton>
+        <SfButton OnClick="ExcelExport" Content="Excel Export"></SfButton> <SfButton OnClick="PdfExport" Content="Pdf Export"></SfButton>
         <SfGrid DataSource="@DynamicObject" GridLines="@GridLine.Both" @ref="DefaultGrid"
                 TValue="ExpandoObject" Toolbar="@(new List<string>() { "Add","Edit", "Delete", "Update", "Cancel","Search","Print" })" AllowFiltering="true"
                 AllowGrouping="true" AllowMultiSorting="true" AllowSorting="true" AllowReordering="true" AllowTextWrap="true" AllowResizing="true" AllowPdfExport="true" AllowExcelExport="true">
@@ -101,5 +102,9 @@
 
             </GridColumns>
         </SfGrid>
+       
     }
+</div>
+<div class="card mb-3 @displayMsg">
+    <lable>No data found</lable>
 </div>

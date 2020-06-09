@@ -11,6 +11,5 @@ namespace DynamicWebAPI.Model
 
         public string StoredProcedureName { get; set; }
 
-        public List<StoredProcedureParameter> StoredProcedureParameters;
     }
 }

@@ -26,7 +26,7 @@ namespace Brookfield.Pages
         public NavigationManager nav { get; set; }
         [Parameter]
         public string xml { get; set; }
-        public IList<Param> paramList { get; set; }
+        public List<Param> paramList { get; set; }
         public string[] value { get; set; }
         public string connString { get; set; }
         public string StoreProcedure { get; set; }
@@ -51,10 +51,11 @@ namespace Brookfield.Pages
         {
             ReadQueryString();
             value = new string[paramList.Count];
-            string jsonstring = string.Empty;
-            jsonstring = (await dynamicAPIService.GetAppConfiguration(connString, StoreProcedure, "Select"));
-            DynamicObject = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
-            dtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
+            //string jsonstring = string.Empty;
+            ////jsonstring = (await dynamicAPIService.GetAppConfiguration(connString, StoreProcedure, "Select"));
+            //jsonstring = await dynamicAPIService.GetDatabyParam(paramList, connString, StoreProcedure, "Select");
+            //DynamicObject = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
+            //dtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
         }
 
         public SfGrid<ExpandoObject> DefaultGrid;
@@ -129,15 +130,17 @@ namespace Brookfield.Pages
                 StoreProcedure = root.SelectSingleNode("Sp").InnerText.ToString();
 
                 XmlNodeList Xparam = xdoc.GetElementsByTagName("Param");
-                IList<Param> listParam = new List<Param>();
+                List<Param> listParam = new List<Param>();
 
                 foreach (XmlNode n in Xparam)
                 {
                     if (n is XmlElement)
                     {
                         Param v = new Param();
-                        v.Name = (n as XmlElement).GetAttribute("Value").ToString();
+                        v.Control = (n as XmlElement).GetAttribute("Control").ToString();
+                        v.Label = (n as XmlElement).GetAttribute("Label").ToString();
                         v.Type = (n as XmlElement).GetAttribute("type").ToString();
+                        //v.Type = null;
                         listParam.Add(v);
                     }
                 }

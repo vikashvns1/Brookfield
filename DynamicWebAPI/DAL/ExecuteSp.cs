@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DynamicWebAPI.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -99,5 +100,53 @@ namespace DynamicWebAPI.DAL
                 return retObject;
             }
         }
+        public async Task<IEnumerable<object>> GetDataSpMasterByParam(string connectionString, string storeProcedureName, string commondName, List<Param> exObj)
+        {
+            var retObject = new List<dynamic>();
+            try
+            {
+                var returnObject = new List<dynamic>();
+                using (SqlConnection sql = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(storeProcedureName, sql))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        if (exObj != null)
+                        {
+                            foreach(Param itm in exObj)
+                            {
+                                cmd.Parameters.AddWithValue("@" + itm.Label, itm.Value);                                                             
+                            }
+                        }
+                        cmd.Parameters.AddWithValue("@StatementType", commondName);
+                        if (cmd.Connection.State != ConnectionState.Open)
+                            cmd.Connection.Open();
+
+                        using (var dataReader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await dataReader.ReadAsync())
+                            {
+                                var dataRow = new ExpandoObject() as IDictionary<string, object>;
+                                for (var iFiled = 0; iFiled < dataReader.FieldCount; iFiled++)
+                                {
+                                    dataRow.Add(
+                                        dataReader.GetName(iFiled),
+                                        dataReader.IsDBNull(iFiled) ? null : dataReader[iFiled] // use null instead of {}
+                                    );
+                                }
+                                retObject.Add((ExpandoObject)dataRow);
+                            }
+                        }
+                        return retObject;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string y = e.Message;
+                return retObject;
+            }
+        }
+
     }
 }

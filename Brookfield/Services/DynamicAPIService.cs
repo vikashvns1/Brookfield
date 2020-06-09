@@ -3,6 +3,7 @@ using Brookfield.Shared;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
 using System.Net.Http;
@@ -23,7 +24,7 @@ namespace Brookfield.Services
 
         public async Task<string> GetAppConfiguration(string connection, string spName, string CommondName)
         {
-            string response=await httpClient.GetStringAsync("api/Values/" + connection + "," + spName + "," + CommondName);
+            string response=await httpClient.GetStringAsync("api/Values/Get/" + connection + "," + spName + "," + CommondName);
             return response;          
         }
 
@@ -32,7 +33,17 @@ namespace Brookfield.Services
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var content = new StringContent(JsonConvert.SerializeObject(exObj), Encoding.UTF8, "application/json");
-            return await httpClient.PostAsync("api/Values/" + connection + "," + spName + "," + CommondName, content).Result.Content.ReadAsStringAsync(); ;
+            var response = await httpClient.PostAsync("api/Values/Post/" + CommondName + "," + connection + "," + spName , content).Result.Content.ReadAsStringAsync();
+            return response;
+        }
+
+        public async Task<string> GetDatabyParam(List<Param> exObj, string connection, string spName, string CommondName)
+        {
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var content = new StringContent(JsonConvert.SerializeObject(exObj), Encoding.UTF8, "application/json");
+            var response= await httpClient.PostAsync("api/Values/GetDatabyParam/" + connection + "," + spName , content).Result.Content.ReadAsStringAsync();
+            return response;
         }
     }
 }

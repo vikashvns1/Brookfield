@@ -8,14 +8,9 @@ namespace Brookfield.Models
 {
     public class Param
     {
-        public string Name { get; set; }
-        public string Type { get; set; }
-    }
-
-    public class Param1
-    {
        public string Control { get; set; }
-       public string Lable { get; set; }
+       public string Label { get; set; }
        public string Type { get; set; }
+       public string Value { get; set; }
     }
 }
