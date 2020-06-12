@@ -28,7 +28,7 @@ namespace DynamicWebAPI.Controllers
         {
             return "value";
         }
-
+        
         // POST api/<ValuesController>
         [HttpPost("{CommondName},{connectionString},{StoreProcedureName}")]
         public async Task<IEnumerable<object>> Post(string CommondName, string connectionString, string StoreProcedureName, [FromBody] ExpandoObject value)
@@ -40,18 +40,6 @@ namespace DynamicWebAPI.Controllers
         public async Task<IEnumerable<object>> GetDatabyParam([FromBody] List<Param> value, string connectionString, string StoreProcedureName)
         {           
             return await exSp.GetDataSpMasterByParam(connectionString, StoreProcedureName,"Select", value);
-        }
-
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        }        
     }
 }

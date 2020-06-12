@@ -10,45 +10,59 @@
 
 <h3>@Tital</h3>
 
-@if (paramList != null)
+@if (ParamList.Count > 0)
 {
     int i = 0;
 
     <div>
-
-        @foreach (var item in paramList)
+        @foreach (var item in ParamList)
         {
             <label>@item.Label</label> <label> : </label>
-            
-            @*<input type="@item.Type" @bind="@item.Value" class="input-group-sm" />*@
-            <Syncfusion.Blazor.Inputs.SfTextBox Type="@item.Type" @bind-Value="@item.Value" Width="150px"></Syncfusion.Blazor.Inputs.SfTextBox>
+
+            if (item.Control == "Text")
+            {
+                <Syncfusion.Blazor.Inputs.SfTextBox Type="@item.Type" @bind-Value="@item.Value" Width="150px"></Syncfusion.Blazor.Inputs.SfTextBox>
+            }
+            else if (item.Control == "ddl")
+            {
+                //Task<string> sCode = Task.Run(async () =>
+                //{
+                //    string jsonstring = await DynamicAPIService.GetAppConfiguration(ConnString, item.Sp, "Select");
+                //    return jsonstring;
+                //});
+
+                //var response = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(sCode.Result);
+
+                string url = "https://localhost:5001/api/Values/Get/" + ConnString + "," + item.Sp + "," + "Select";
+
+                <Syncfusion.Blazor.DropDowns.SfDropDownList TValue="string" TItem="@object" Placeholder="Select Department" @bind-Value="@item.Value" Width="160px">
+                    <Syncfusion.Blazor.Data.SfDataManager Url="@url" Adaptor="Adaptors.WebApiAdaptor" CrossDomain="true"></Syncfusion.Blazor.Data.SfDataManager>
+                    <Syncfusion.Blazor.DropDowns.DropDownListFieldSettings Value="@item.Key" Text="@item.KeyValue"></Syncfusion.Blazor.DropDowns.DropDownListFieldSettings>
+                </Syncfusion.Blazor.DropDowns.SfDropDownList>
+            }
             i++;
         }
-        <SfButton Type="submit" @onclick="submitedata">Submit</SfButton>
 
+        <SfButton Type="submit" @onclick="submitedata">Submit</SfButton>
 
         @code {
 
-
-
-            //[Parameter]
-            //public DataTable dt { get; set; }
             string display = "d-none";
             string displayMsg = "d-none";
 
             async Task submitedata()
             {
-
                 string jsonstring = string.Empty;
-                jsonstring = await dynamicAPIService.GetDatabyParam(paramList, connString, StoreProcedure, "Select");
+                jsonstring = await DynamicAPIService.GetDatabyParam(ParamList, ConnString, StoreProcedure, "Select");
                 var response = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
 
                 if (response.Count > 0)
                 {
                     DynamicObject = null;
-                    dtEmployeeList = null;
+                    DtEmployeeList = null;
                     DynamicObject = response;
-                    dtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
+                    DtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
+                  
                     display = "";
                     displayMsg = "d-none";
                 }
@@ -60,8 +74,12 @@
             }
 
         }
-
     </div>
+}
+else
+{
+    display = "";
+    displayMsg = "d-none";
 }
 <div class="card mb-3 @display">
 
@@ -71,38 +89,92 @@
     }
     else
     {
-        <SfButton OnClick="ExcelExport" Content="Excel Export"></SfButton> <SfButton OnClick="PdfExport" Content="Pdf Export"></SfButton>
+        <table width="25%" border="0">
+            <tr>
+                <td align="center"> <SfButton OnClick="ExcelExport" IconCss="e-icons e-plus-exlicon"  Content="Excel Export"></SfButton> </td>
+                <td align="left">
+                    <SfButton OnClick="PdfExport" Content="Pdf Export" IconCss="e-icons e-plus-pdficon"></SfButton>
+                </td>
+            </tr>
+        </table>
+
+        <style>
+            .e-plus-pdficon::before {
+                content: '\e240';
+            }
+            .e-plus-exlicon::before {
+                content: '\e242';
+            }
+        </style>
         <SfGrid DataSource="@DynamicObject" GridLines="@GridLine.Both" @ref="DefaultGrid"
                 TValue="ExpandoObject" Toolbar="@(new List<string>() { "Add","Edit", "Delete", "Update", "Cancel","Search","Print" })" AllowFiltering="true"
                 AllowGrouping="true" AllowMultiSorting="true" AllowSorting="true" AllowReordering="true" AllowTextWrap="true" AllowResizing="true" AllowPdfExport="true" AllowExcelExport="true">
             <GridEvents OnActionBegin="ActionBeginAsync" TValue="ExpandoObject"></GridEvents>
             <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Normal"></GridEditSettings>
             <GridColumns>
-                @foreach (DataColumn col in dtEmployeeList.Columns)
+                @foreach (DataColumn col in DtEmployeeList.Columns)
                 {
                     switch (col.DataType.FullName)
                     {
                         case "System.Int64":
-                            <GridColumn Field="@col.ToString()" Type="ColumnType.Number" HeaderTextAlign="@TextAlign.Center" TextAlign="@TextAlign.Right" AllowFiltering="false">
-                                <FilterTemplate></FilterTemplate>
-                            </GridColumn>
+                            @if (ColumnList.Count > 0)
+                            {
+                                var Colitem = ColumnList.Find(a => a.Name.ToUpper() == col.ToString().ToUpper());
+                                if (Colitem != null)
+                                {
+                                    <GridColumn Field="@col.ToString()" Type="ColumnType.Number" AllowEditing="@Colitem.Edit" HeaderTextAlign="@TextAlign.Center" TextAlign="@TextAlign.Right" AllowFiltering="@Colitem.Filter" />
+                                }
+                                else
+                                {
+                                    <GridColumn Field="@col.ToString()" Type="ColumnType.Number" HeaderTextAlign="@TextAlign.Center" TextAlign="@TextAlign.Right" />
+                                }
+                            }
+                            else
+                            {
+                                <GridColumn Field="@col.ToString()" Type="ColumnType.Number" HeaderTextAlign="@TextAlign.Center" TextAlign="@TextAlign.Right" />
+                            }
                             break;
                         case "System.DateTime":
-                            <GridColumn Field="@col.ToString()" Format="MM/dd/yyyy" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.Date" AllowFiltering="true">
-                                @*<FilterTemplate>
-                                        <Syncfusion.Blazor.Calendars.SfDatePicker TValue="DateTime" Format="d"></Syncfusion.Blazor.Calendars.SfDatePicker>
-                                    </FilterTemplate>*@
-                            </GridColumn>
+                            @if (ColumnList.Count > 0)
+                            {
+                                var Colitem = ColumnList.Find(a => a.Name.ToUpper() == col.ToString().ToUpper());
+                                if (Colitem != null)
+                                {
+                                    <GridColumn Field="@col.ToString()" Type="ColumnType.Date" Format="MM/dd/yyyy" AllowEditing="@Colitem.Edit" HeaderTextAlign="@TextAlign.Center" AllowFiltering="@Colitem.Filter" />
+                                }
+                                else
+                                {
+                                    <GridColumn Field="@col.ToString()" Format="MM/dd/yyyy" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.Date" />
+                                }
+                            }
+                            else
+                            {
+                                <GridColumn Field="@col.ToString()" Format="MM/dd/yyyy" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.Date" />
+                            }
                             break;
                         case "System.String":
-                            <GridColumn Field="@col.ToString()" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.String" AllowFiltering="true"></GridColumn>
+                            @if (ColumnList.Count > 0)
+                            {
+                                var Colitem = ColumnList.Find(a => a.Name.ToUpper() == col.ToString().ToUpper());
+                                if (Colitem != null)
+                                {
+                                    <GridColumn Field="@col.ToString()" Type="ColumnType.String" AllowEditing="@Colitem.Edit" HeaderTextAlign="@TextAlign.Center" AllowFiltering="@Colitem.Filter" />
+                                }
+                                else
+                                {
+                                    <GridColumn Field="@col.ToString()" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.String" />
+                                }
+                            }
+                            else
+                            {
+                                <GridColumn Field="@col.ToString()" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.String" />
+                            }
                             break;
                     }
-                }
 
+                }
             </GridColumns>
         </SfGrid>
-       
     }
 </div>
 <div class="card mb-3 @displayMsg">

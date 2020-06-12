@@ -21,14 +21,14 @@ namespace Brookfield.Pages
     public class DynamicViewBase : BaseComponent
     {
         [Inject]
-        public IDynamicAPIService dynamicAPIService { get; set; }
+        public IDynamicAPIService DynamicAPIService { get; set; }
         [Inject]
-        public NavigationManager nav { get; set; }
+        public NavigationManager Nav { get; set; }
         [Parameter]
-        public string xml { get; set; }
-        public List<Param> paramList { get; set; }
-        public string[] value { get; set; }
-        public string connString { get; set; }
+        public string Xml { get; set; }
+        public List<Param> ParamList { get; set; }
+        public List<Column> ColumnList { get; set; }
+        public string ConnString { get; set; }
         public string StoreProcedure { get; set; }
         public string Tital { get; set; }
         private ObservableCollection<ExpandoObject> collection;
@@ -36,12 +36,12 @@ namespace Brookfield.Pages
         public ObservableCollection<ExpandoObject> DynamicObject
         {
             get { return collection; }
-            set { this.collection = value;}
+            set { this.collection = value; }
         }
 
         private DataTable dataTable;
 
-        public DataTable dtEmployeeList
+        public DataTable DtEmployeeList
         {
             get { return dataTable; }
             set { this.dataTable = value; }
@@ -50,12 +50,12 @@ namespace Brookfield.Pages
         protected override async Task OnInitializedAsync()
         {
             ReadQueryString();
-            value = new string[paramList.Count];
-            //string jsonstring = string.Empty;
-            ////jsonstring = (await dynamicAPIService.GetAppConfiguration(connString, StoreProcedure, "Select"));
-            //jsonstring = await dynamicAPIService.GetDatabyParam(paramList, connString, StoreProcedure, "Select");
-            //DynamicObject = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
-            //dtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
+            if (ParamList.Count == 0)
+            {
+                string jsonstring = (await DynamicAPIService.GetAppConfiguration(ConnString, StoreProcedure, "Select"));
+                DynamicObject = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
+                DtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
+            }
         }
 
         public SfGrid<ExpandoObject> DefaultGrid;
@@ -77,42 +77,36 @@ namespace Brookfield.Pages
         {
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
-                string jsonstring = string.Empty;
+                //string jsonstring = string.Empty;
 
                 if (args.Data.First().Value == null)
                 {
-                    jsonstring = await dynamicAPIService.InsertData(args.Data, connString, StoreProcedure, "Insert");
-                    List<ExpandoObject> exObj = new List<ExpandoObject>();
-                    exObj = JsonConvert.DeserializeObject<List<ExpandoObject>>(jsonstring);
+                    string jsonstring = await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Insert");
+                    List<ExpandoObject> exObj = JsonConvert.DeserializeObject<List<ExpandoObject>>(jsonstring);
                     DynamicObject.Add(exObj[0]);
-                    //await DefaultGrid.DeleteRow(args.Data);
-                    //DefaultGrid.Refresh();
+
                 }
                 else
                 {
-                    jsonstring = await dynamicAPIService.InsertData(args.Data, connString, StoreProcedure, "Update");
+                    await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Update");
                     //StateHasChanged();
                 }
-                await DefaultGrid.CloseEdit();               
+                await DefaultGrid.CloseEdit();
             }
             else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             {
-               await dynamicAPIService.InsertData(args.Data, connString, StoreProcedure, "Delete");
-               DynamicObject.Remove(args.Data);
-               //await DefaultGrid.DeleteRow(args.Data);
-
-                //StateHasChanged();
-                //DefaultGrid.Refresh();
+                await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Delete");
+                DynamicObject.Remove(args.Data);
             }
         }
 
         public void ReadQueryString()
         {
             System.Uri uri;
-            uri = nav.ToAbsoluteUri(nav.Uri);
+            uri = Nav.ToAbsoluteUri(Nav.Uri);
             if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("ConnString", out var conn))
             {
-                connString = conn;
+                ConnString = conn;
             }
 
             if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Tital", out var tital))
@@ -122,9 +116,9 @@ namespace Brookfield.Pages
 
             if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("xml", out var qxml))
             {
-                xml = qxml;
+                Xml = qxml;
                 XmlDocument xdoc = new XmlDocument();
-                xdoc.LoadXml(xml.ToString());
+                xdoc.LoadXml(Xml.ToString());
 
                 XmlElement root = xdoc.DocumentElement;
                 StoreProcedure = root.SelectSingleNode("Sp").InnerText.ToString();
@@ -136,16 +130,35 @@ namespace Brookfield.Pages
                 {
                     if (n is XmlElement)
                     {
-                        Param v = new Param();
-                        v.Control = (n as XmlElement).GetAttribute("Control").ToString();
-                        v.Label = (n as XmlElement).GetAttribute("Label").ToString();
-                        v.Type = (n as XmlElement).GetAttribute("type").ToString();
-                        //v.Type = null;
-                        listParam.Add(v);
+                        listParam.Add(new Param
+                        {
+                            Control = (n as XmlElement).GetAttribute("Control").ToString(),
+                            Label = (n as XmlElement).GetAttribute("Label").ToString(),
+                            Type = (n as XmlElement).GetAttribute("type").ToString(),
+                            Sp = (n as XmlElement).GetAttribute("Sp").ToString(),
+                            Key = (n as XmlElement).GetAttribute("Key").ToString(),
+                            KeyValue = (n as XmlElement).GetAttribute("KeyValue").ToString(),
+                        });
                     }
                 }
 
-                paramList = listParam;
+                ParamList = listParam;
+
+                XmlNodeList XNonEditable = xdoc.GetElementsByTagName("Column");
+                List<Column> listNonEditable = new List<Column>();
+                foreach (XmlNode c in XNonEditable)
+                {
+                    if (c is XmlElement)
+                    {
+                        listNonEditable.Add(new Column
+                        {
+                            Name = (c as XmlElement).GetAttribute("Name").ToString(),
+                            Edit = Convert.ToBoolean((c as XmlElement).GetAttribute("Edit").ToString()),
+                            Filter = Convert.ToBoolean((c as XmlElement).GetAttribute("Filter").ToString()),
+                        });
+                    }
+                }
+                ColumnList = listNonEditable;
             }
         }
     }
