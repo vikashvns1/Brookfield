@@ -45,9 +45,10 @@ namespace DynamicWebAPI.DAL
                 }
             }
         }
-        public async Task<IEnumerable<object>> ExecuteSpMasterData(string connectionString, string storeProcedureName, string commondName, ExpandoObject exObj)
+        public async Task<OutputData> ExecuteSpMasterData(string connectionString, string storeProcedureName, string commondName, ExpandoObject exObj)
         {
-            var retObject = new List<dynamic>();
+            OutputData _outPut = new OutputData();
+            var retObject = new List<ExpandoObject>();
             try
             {
                 var returnObject = new List<dynamic>();
@@ -72,11 +73,15 @@ namespace DynamicWebAPI.DAL
                             }
                         }
                         cmd.Parameters.AddWithValue("@StatementType", commondName);
+                        cmd.Parameters.Add("@Msg", SqlDbType.NVarChar, 50);
+                        cmd.Parameters["@Msg"].Direction = ParameterDirection.Output;
+
                         if (cmd.Connection.State != ConnectionState.Open)
                             cmd.Connection.Open();
 
                         using (var dataReader = await cmd.ExecuteReaderAsync())
                         {
+
                             while (await dataReader.ReadAsync())
                             {
                                 var dataRow = new ExpandoObject() as IDictionary<string, object>;
@@ -90,19 +95,23 @@ namespace DynamicWebAPI.DAL
                                 retObject.Add((ExpandoObject)dataRow);
                             }
                         }
-                        return retObject;
+
+                        _outPut.Msg = (string)cmd.Parameters["@Msg"].Value.ToString();
+                        _outPut.DynamicData = retObject;
+                        return _outPut;
                     }
                 }
             }
             catch (Exception e)
             {
                 string y = e.Message;
-                return retObject;
+                return _outPut;
             }
         }
-        public async Task<IEnumerable<object>> GetDataSpMasterByParam(string connectionString, string storeProcedureName, string commondName, List<Param> exObj)
+        public async Task<OutputData> GetDataSpMasterByParam(string connectionString, string storeProcedureName, string commondName, List<Param> exObj)
         {
-            var retObject = new List<dynamic>();
+            OutputData _outPut = new OutputData();
+            var retObject = new List<ExpandoObject>();
             try
             {
                 var returnObject = new List<dynamic>();
@@ -119,11 +128,14 @@ namespace DynamicWebAPI.DAL
                             }
                         }
                         cmd.Parameters.AddWithValue("@StatementType", commondName);
+                        cmd.Parameters.Add("@Msg",SqlDbType.NVarChar,50);
+                        cmd.Parameters["@Msg"].Direction = ParameterDirection.Output;
                         if (cmd.Connection.State != ConnectionState.Open)
                             cmd.Connection.Open();
 
                         using (var dataReader = await cmd.ExecuteReaderAsync())
                         {
+
                             while (await dataReader.ReadAsync())
                             {
                                 var dataRow = new ExpandoObject() as IDictionary<string, object>;
@@ -137,16 +149,19 @@ namespace DynamicWebAPI.DAL
                                 retObject.Add((ExpandoObject)dataRow);
                             }
                         }
-                        return retObject;
+
+                        _outPut.Msg = (string)cmd.Parameters["@Msg"].Value.ToString();
+
+                        _outPut.DynamicData = retObject;
+                        return _outPut;
                     }
                 }
             }
             catch (Exception e)
             {
                 string y = e.Message;
-                return retObject;
+                return _outPut;
             }
         }
-
     }
 }

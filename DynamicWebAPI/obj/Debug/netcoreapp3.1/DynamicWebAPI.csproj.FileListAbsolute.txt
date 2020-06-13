@@ -24,3 +24,4 @@ D:\BlazorPoc\Brookfield\DynamicWebAPI\obj\Debug\netcoreapp3.1\staticwebassets\Dy
 D:\BlazorPoc\Brookfield\DynamicWebAPI\obj\Debug\netcoreapp3.1\DynamicWebAPI.dll
 D:\BlazorPoc\Brookfield\DynamicWebAPI\obj\Debug\netcoreapp3.1\DynamicWebAPI.pdb
 D:\BlazorPoc\Brookfield\DynamicWebAPI\obj\Debug\netcoreapp3.1\DynamicWebAPI.genruntimeconfig.cache
+D:\BlazorPoc\Brookfield\DynamicWebAPI\obj\Debug\netcoreapp3.1\DynamicWebAPI.csprojAssemblyReference.cache

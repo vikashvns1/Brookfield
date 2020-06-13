@@ -2,11 +2,12 @@
 @using System.Data;
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Popups
 @inherits DynamicViewBase
 @using System.Dynamic
 @using Newtonsoft.Json;
 @using System.Collections.ObjectModel;
-
+@using Brookfield.Models;
 
 <h3>@Tital</h3>
 
@@ -54,15 +55,15 @@
             {
                 string jsonstring = string.Empty;
                 jsonstring = await DynamicAPIService.GetDatabyParam(ParamList, ConnString, StoreProcedure, "Select");
-                var response = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
+                var response = JsonConvert.DeserializeObject<Brookfield.Models.OutputData>(jsonstring);
 
-                if (response.Count > 0)
+                if (response.DynamicData.Count > 0)
                 {
                     DynamicObject = null;
                     DtEmployeeList = null;
-                    DynamicObject = response;
-                    DtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
-                  
+                    DynamicObject = new ObservableCollection<ExpandoObject>(response.DynamicData);
+                    DtEmployeeList = Extensions.ToDataTable(response.DynamicData, "tbl");
+
                     display = "";
                     displayMsg = "d-none";
                 }
@@ -91,7 +92,7 @@ else
     {
         <table width="25%" border="0">
             <tr>
-                <td align="center"> <SfButton OnClick="ExcelExport" IconCss="e-icons e-plus-exlicon"  Content="Excel Export"></SfButton> </td>
+                <td align="center"> <SfButton OnClick="ExcelExport" IconCss="e-icons e-plus-exlicon" Content="Excel Export"></SfButton> </td>
                 <td align="left">
                     <SfButton OnClick="PdfExport" Content="Pdf Export" IconCss="e-icons e-plus-pdficon"></SfButton>
                 </td>
@@ -102,15 +103,18 @@ else
             .e-plus-pdficon::before {
                 content: '\e240';
             }
+
             .e-plus-exlicon::before {
                 content: '\e242';
             }
         </style>
+
+
         <SfGrid DataSource="@DynamicObject" GridLines="@GridLine.Both" @ref="DefaultGrid"
-                TValue="ExpandoObject" Toolbar="@(new List<string>() { "Add","Edit", "Delete", "Update", "Cancel","Search","Print" })" AllowFiltering="true"
+                TValue="ExpandoObject" Toolbar="@(new List<string>() {"Add","Search","Print" })" AllowFiltering="true"
                 AllowGrouping="true" AllowMultiSorting="true" AllowSorting="true" AllowReordering="true" AllowTextWrap="true" AllowResizing="true" AllowPdfExport="true" AllowExcelExport="true">
             <GridEvents OnActionBegin="ActionBeginAsync" TValue="ExpandoObject"></GridEvents>
-            <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Normal"></GridEditSettings>
+            <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Normal" ShowConfirmDialog="true"></GridEditSettings>
             <GridColumns>
                 @foreach (DataColumn col in DtEmployeeList.Columns)
                 {
@@ -122,16 +126,16 @@ else
                                 var Colitem = ColumnList.Find(a => a.Name.ToUpper() == col.ToString().ToUpper());
                                 if (Colitem != null)
                                 {
-                                    <GridColumn Field="@col.ToString()" Type="ColumnType.Number" AllowEditing="@Colitem.Edit" HeaderTextAlign="@TextAlign.Center" TextAlign="@TextAlign.Right" AllowFiltering="@Colitem.Filter" />
+                                    <GridColumn Field="@col.ToString()" Type="ColumnType.Number" AllowEditing="@Colitem.Edit" HeaderTextAlign="@TextAlign.Center" EditType="EditType.NumericEdit" TextAlign="@TextAlign.Right" AllowFiltering="@Colitem.Filter" />
                                 }
                                 else
                                 {
-                                    <GridColumn Field="@col.ToString()" Type="ColumnType.Number" HeaderTextAlign="@TextAlign.Center" TextAlign="@TextAlign.Right" />
+                                    <GridColumn Field="@col.ToString()" Type="ColumnType.Number" HeaderTextAlign="@TextAlign.Center" TextAlign="@TextAlign.Right" EditType="EditType.NumericEdit" />
                                 }
                             }
                             else
                             {
-                                <GridColumn Field="@col.ToString()" Type="ColumnType.Number" HeaderTextAlign="@TextAlign.Center" TextAlign="@TextAlign.Right" />
+                                <GridColumn Field="@col.ToString()" Type="ColumnType.Number" HeaderTextAlign="@TextAlign.Center" TextAlign="@TextAlign.Right" EditType="EditType.NumericEdit" />
                             }
                             break;
                         case "System.DateTime":
@@ -140,16 +144,16 @@ else
                                 var Colitem = ColumnList.Find(a => a.Name.ToUpper() == col.ToString().ToUpper());
                                 if (Colitem != null)
                                 {
-                                    <GridColumn Field="@col.ToString()" Type="ColumnType.Date" Format="MM/dd/yyyy" AllowEditing="@Colitem.Edit" HeaderTextAlign="@TextAlign.Center" AllowFiltering="@Colitem.Filter" />
+                                    <GridColumn Field="@col.ToString()" Type="ColumnType.Date" Format="MM/dd/yyyy" AllowEditing="@Colitem.Edit" HeaderTextAlign="@TextAlign.Center" AllowFiltering="@Colitem.Filter" EditType="EditType.DatePickerEdit" />
                                 }
                                 else
                                 {
-                                    <GridColumn Field="@col.ToString()" Format="MM/dd/yyyy" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.Date" />
+                                    <GridColumn Field="@col.ToString()" Format="MM/dd/yyyy" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.Date" EditType="EditType.DatePickerEdit" />
                                 }
                             }
                             else
                             {
-                                <GridColumn Field="@col.ToString()" Format="MM/dd/yyyy" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.Date" />
+                                <GridColumn Field="@col.ToString()" Format="MM/dd/yyyy" HeaderTextAlign="@TextAlign.Center" Type="ColumnType.Date" EditType="EditType.DatePickerEdit" />
                             }
                             break;
                         case "System.String":
@@ -173,6 +177,14 @@ else
                     }
 
                 }
+                <GridColumn HeaderText="Manage Records">
+                    <GridCommandColumns>
+                        <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-edit", CssClass = "e-flat" })"></GridCommandColumn>
+                        <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-delete", CssClass = "e-flat" })"></GridCommandColumn>
+                        <GridCommandColumn Type="CommandButtonType.Save" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-update", CssClass = "e-flat" })"></GridCommandColumn>
+                        <GridCommandColumn Type="CommandButtonType.Cancel" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-cancel-icon", CssClass = "e-flat" })"></GridCommandColumn>
+                    </GridCommandColumns>
+                </GridColumn>
             </GridColumns>
         </SfGrid>
     }
@@ -180,3 +192,26 @@ else
 <div class="card mb-3 @displayMsg">
     <lable>No data found</lable>
 </div>
+
+<div id="target" >
+
+    <SfDialog Width="250px" @ref="@DlgRef" Target="#target" Visible="false">
+        <DialogTemplates>
+            <Header> @PopHeadarMsg </Header>
+            <Content> @PopMsg </Content>
+        </DialogTemplates>                
+            <DialogButtons>
+                <DialogButton OnClick="@CloseDialog">
+                    <DialogButtonModel Content="OK" IsPrimary="true"></DialogButtonModel>
+                </DialogButton>              
+            </DialogButtons>       
+    </SfDialog>
+</div>
+<style>
+        #target {
+                margin-top: 70px;
+                min-height: 300px;
+                height: 100%;
+
+    }
+</style>

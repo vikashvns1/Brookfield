@@ -31,15 +31,16 @@ namespace DynamicWebAPI.Controllers
         
         // POST api/<ValuesController>
         [HttpPost("{CommondName},{connectionString},{StoreProcedureName}")]
-        public async Task<IEnumerable<object>> Post(string CommondName, string connectionString, string StoreProcedureName, [FromBody] ExpandoObject value)
+        public async Task<OutputData> Post(string CommondName, string connectionString, string StoreProcedureName, [FromBody] ExpandoObject value)
         {
            return await exSp.ExecuteSpMasterData(connectionString,StoreProcedureName,CommondName,value);
         }
 
         [HttpPost("{connectionString},{StoreProcedureName}")]
-        public async Task<IEnumerable<object>> GetDatabyParam([FromBody] List<Param> value, string connectionString, string StoreProcedureName)
+        public async Task<OutputData> GetDatabyParam([FromBody] List<Param> value, string connectionString, string StoreProcedureName)
         {           
-            return await exSp.GetDataSpMasterByParam(connectionString, StoreProcedureName,"Select", value);
+            var reponse= await exSp.GetDataSpMasterByParam(connectionString, StoreProcedureName,"Select", value);
+            return reponse;
         }        
     }
 }

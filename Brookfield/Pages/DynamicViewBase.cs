@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using Syncfusion.Blazor;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Popups;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Dynamic;
 using System.Linq;
@@ -31,12 +33,19 @@ namespace Brookfield.Pages
         public string ConnString { get; set; }
         public string StoreProcedure { get; set; }
         public string Tital { get; set; }
+        public SfDialog DlgRef;
+        public string PopHeadarMsg { get; set; }
+        public string PopMsg { get; set; }
         private ObservableCollection<ExpandoObject> collection;
 
         public ObservableCollection<ExpandoObject> DynamicObject
-        {
+        {          
             get { return collection; }
-            set { this.collection = value; }
+            set
+            {
+                this.collection = value;
+                NotifyPropertyChanged("DynamicObject");
+            }
         }
 
         private DataTable dataTable;
@@ -75,29 +84,61 @@ namespace Brookfield.Pages
 
         public async Task ActionBeginAsync(ActionEventArgs<ExpandoObject> args)
         {
+          
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
                 //string jsonstring = string.Empty;
-
                 if (args.Data.First().Value == null)
                 {
                     string jsonstring = await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Insert");
-                    List<ExpandoObject> exObj = JsonConvert.DeserializeObject<List<ExpandoObject>>(jsonstring);
-                    DynamicObject.Add(exObj[0]);
+                    OutputData exObj = JsonConvert.DeserializeObject<OutputData>(jsonstring);
+                    DynamicObject.Add(exObj.DynamicData[0]);
+                    this.DlgRef.Visible = true;
+                    this.DlgRef.Show();
+                    PopHeadarMsg = "Insert";
+                    PopMsg = exObj.Msg;
+                    //await this.DefaultGrid.AddRecord(exObj[0]);
+                    StateHasChanged();
+                    //this.DefaultGrid.Refresh();
 
                 }
                 else
                 {
-                    await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Update");
-                    //StateHasChanged();
+                    double index = args.RowIndex;
+                    string jsonstring = await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Update");
+                    OutputData exObj = JsonConvert.DeserializeObject<OutputData>(jsonstring);
+                    //await this.DefaultGrid.UpdateRow(index, exObj.DynamicData[0]);
+                    this.DlgRef.Visible = true;
+
+                    this.DlgRef.Show();
+
+                    PopHeadarMsg = "Update";
+                    PopMsg = exObj.Msg;
+                    this.DefaultGrid.Refresh();
+                    StateHasChanged();
                 }
                 await DefaultGrid.CloseEdit();
             }
             else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             {
-                await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Delete");
-                DynamicObject.Remove(args.Data);
+                string jsonstring =await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Delete");
+                OutputData exObj = JsonConvert.DeserializeObject<OutputData>(jsonstring);
+               
+                //await this.DefaultGrid.DeleteRecord();
+                DynamicObject.Remove(DynamicObject.Where(i => i == args.Data).SingleOrDefault());
+                this.DlgRef.Visible = true;
+                this.DlgRef.Show();
+                PopHeadarMsg = "Delete";
+                PopMsg = exObj.Msg;
+                //await this.DefaultGrid.DeleteRecord();
+                StateHasChanged();
+                this.DefaultGrid.Refresh();
             }
+        }
+        public void CloseDialog()
+        {
+            this.DlgRef.Visible = false;
+            this.DlgRef.Hide();
         }
 
         public void ReadQueryString()
@@ -159,6 +200,17 @@ namespace Brookfield.Pages
                     }
                 }
                 ColumnList = listNonEditable;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }
