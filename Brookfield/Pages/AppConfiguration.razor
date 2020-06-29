@@ -11,13 +11,20 @@
 }
 else
 {
-    <SfGrid DataSource="@appConfiguration" GridLines="@GridLine.Both" AllowTextWrap="true" AllowResizing="true">
+    <SfGrid DataSource="@appConfiguration" GridLines="@GridLine.Both" AllowTextWrap="true" AllowResizing="true" Width="100%">
         <GridColumns>
             @foreach (DataColumn col in dtList.Columns)
             {
-                <GridColumn Field=@col.ColumnName />
+                if (col.ColumnName == "Id")
+                {<GridColumn Field=@col.ColumnName Width="7%" />
+                }
+                else if (col.ColumnName == "Xml")
+                {<GridColumn Field=@col.ColumnName Width="60%" />
+                }
+                else
+                { <GridColumn Field=@col.ColumnName Width="23%" />}
             }
-            <GridColumn TextAlign="@TextAlign.Center" Width="70px">
+            <GridColumn TextAlign="@TextAlign.Center" Width="10%">
                 <Template>
                     @{
                         string Xml = ((string)(context as IDictionary<string, object>)["Xml"]);

@@ -26,6 +26,7 @@ D:\BlazorPoc\Brookfield\Brookfield\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 D:\BlazorPoc\Brookfield\Brookfield\bin\Debug\netcoreapp3.1\Syncfusion.Blazor.dll
 D:\BlazorPoc\Brookfield\Brookfield\bin\Debug\netcoreapp3.1\Syncfusion.Licensing.dll
 D:\BlazorPoc\Brookfield\Brookfield\bin\Debug\netcoreapp3.1\System.Text.Json.dll
+D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.csprojAssemblyReference.cache
 D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.AssemblyInfoInputs.cache
 D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.AssemblyInfo.cs
 D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.csproj.CoreCompileInputs.cache
@@ -61,4 +62,3 @@ D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\staticwebassets\Brook
 D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.dll
 D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.pdb
 D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.genruntimeconfig.cache
-D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.csprojAssemblyReference.cache

@@ -10,5 +10,6 @@ namespace Brookfield.Models
         public string Name { get; set; }
         public bool Edit { get; set; }
         public bool Filter { get; set; }
+        public bool IsPrimaryKey { get; set; } = false;
     }
 }

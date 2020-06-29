@@ -32,10 +32,17 @@ namespace Brookfield.Pages
         public List<Column> ColumnList { get; set; }
         public string ConnString { get; set; }
         public string StoreProcedure { get; set; }
+        public string Action { get; set; }
         public string Tital { get; set; }
         public SfDialog DlgRef;
         public string PopHeadarMsg { get; set; }
         public string PopMsg { get; set; }
+        public bool IsInitialRender = false;
+        public bool IsInitialRenderGrid = false;
+        public bool IsInitialRenderChart = false;
+
+        public string RowsCount = "0";
+        public string ColumnCount = "0";
         private ObservableCollection<ExpandoObject> collection;
 
         public ObservableCollection<ExpandoObject> DynamicObject
@@ -56,6 +63,11 @@ namespace Brookfield.Pages
             set { this.dataTable = value; }
         }
 
+        public ObservableCollection<ExpandoObject> ChartDataObj;
+        public DataTable ChartdataTable;
+        public ChartAttributes AttributesOfChart { get; set; } = new ChartAttributes();
+
+
         protected override async Task OnInitializedAsync()
         {
             ReadQueryString();
@@ -63,32 +75,52 @@ namespace Brookfield.Pages
             {
                 string jsonstring = (await DynamicAPIService.GetAppConfiguration(ConnString, StoreProcedure, "Select"));
                 DynamicObject = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
-                DtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
+                if (IsInitialRenderGrid == false)
+                {
+                    IsInitialRenderGrid = true;
+                    DtEmployeeList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));
+                    RowsCount = DynamicObject.Count.ToString();
+                }
+                ColumnCount = DtEmployeeList.Columns.Count.ToString();
+
+                ///Chart
+                if (AttributesOfChart!= null)
+                {
+                    if (IsInitialRenderChart == false)
+                    {
+                        IsInitialRenderChart = true;
+                        string jsonChartstring = (await DynamicAPIService.GetAppConfiguration(ConnString, AttributesOfChart.SpName, "Select"));
+                        ChartDataObj = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonChartstring);
+                        //ChartdataTable = (DataTable)JsonConvert.DeserializeObject(jsonChartstring, (typeof(DataTable)));
+                    }
+                }
             }
         }
 
         public SfGrid<ExpandoObject> DefaultGrid;
-        public void ExcelExport()
-        {
-            ExcelExportProperties ExportProperties = new ExcelExportProperties();
-            ExportProperties.ExportType = ExportType.CurrentPage;
-            DefaultGrid.ExcelExport(ExportProperties);
-        }
 
-        public void PdfExport()
+        public void ToolbarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs Args)
         {
-            PdfExportProperties ExportProperties = new PdfExportProperties();
-            ExportProperties.FileName = "test.pdf";
-            DefaultGrid.PdfExport(ExportProperties);
+            if (Args.Item.Text == "PDF Export")
+            {
+                PdfExportProperties ExportProperties = new PdfExportProperties();
+                ExportProperties.FileName = "test.pdf";
+                this.DefaultGrid.PdfExport(ExportProperties);
+            }
+            else if (Args.Item.Text == "Excel Export")
+            {
+                ExcelExportProperties ExportProperties = new ExcelExportProperties();
+                ExportProperties.ExportType = ExportType.CurrentPage;
+                DefaultGrid.ExcelExport(ExportProperties);
+            }
         }
-
         public async Task ActionBeginAsync(ActionEventArgs<ExpandoObject> args)
         {
           
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
-                //string jsonstring = string.Empty;
-                if (args.Data.First().Value == null)
+                args.Cancel = true;
+                if (args.Action == "add")
                 {
                     string jsonstring = await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Insert");
                     OutputData exObj = JsonConvert.DeserializeObject<OutputData>(jsonstring);
@@ -97,44 +129,34 @@ namespace Brookfield.Pages
                     this.DlgRef.Show();
                     PopHeadarMsg = "Insert";
                     PopMsg = exObj.Msg;
-                    //await this.DefaultGrid.AddRecord(exObj[0]);
-                    StateHasChanged();
-                    //this.DefaultGrid.Refresh();
-
                 }
                 else
                 {
-                    double index = args.RowIndex;
+                    int index =Convert.ToInt32(args.RowIndex);
                     string jsonstring = await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Update");
                     OutputData exObj = JsonConvert.DeserializeObject<OutputData>(jsonstring);
-                    //await this.DefaultGrid.UpdateRow(index, exObj.DynamicData[0]);
+                    DynamicObject[index]=args.Data;
                     this.DlgRef.Visible = true;
-
                     this.DlgRef.Show();
-
                     PopHeadarMsg = "Update";
                     PopMsg = exObj.Msg;
-                    this.DefaultGrid.Refresh();
-                    StateHasChanged();
                 }
                 await DefaultGrid.CloseEdit();
             }
             else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             {
+                //args.Cancel = true;
                 string jsonstring =await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Delete");
                 OutputData exObj = JsonConvert.DeserializeObject<OutputData>(jsonstring);
-               
-                //await this.DefaultGrid.DeleteRecord();
-                DynamicObject.Remove(DynamicObject.Where(i => i == args.Data).SingleOrDefault());
+                //int index = Convert.ToInt32(args.RowIndex);               
+                //DynamicObject.Remove(exObj.DynamicData[0]);               
                 this.DlgRef.Visible = true;
                 this.DlgRef.Show();
                 PopHeadarMsg = "Delete";
                 PopMsg = exObj.Msg;
-                //await this.DefaultGrid.DeleteRecord();
-                StateHasChanged();
-                this.DefaultGrid.Refresh();
             }
         }
+
         public void CloseDialog()
         {
             this.DlgRef.Visible = false;
@@ -163,6 +185,7 @@ namespace Brookfield.Pages
 
                 XmlElement root = xdoc.DocumentElement;
                 StoreProcedure = root.SelectSingleNode("Sp").InnerText.ToString();
+                Action = root.SelectSingleNode("Action").InnerText.ToString();
 
                 XmlNodeList Xparam = xdoc.GetElementsByTagName("Param");
                 List<Param> listParam = new List<Param>();
@@ -196,10 +219,27 @@ namespace Brookfield.Pages
                             Name = (c as XmlElement).GetAttribute("Name").ToString(),
                             Edit = Convert.ToBoolean((c as XmlElement).GetAttribute("Edit").ToString()),
                             Filter = Convert.ToBoolean((c as XmlElement).GetAttribute("Filter").ToString()),
+                            IsPrimaryKey= (c as XmlElement).HasAttribute("IsPrimaryKey")?true:false,
                         });
                     }
                 }
                 ColumnList = listNonEditable;
+
+                XmlNodeList Xchart = xdoc.GetElementsByTagName("Chart");
+
+                foreach (XmlNode CA in Xchart)
+                {
+                    if (CA is XmlElement)
+                    {
+                        AttributesOfChart.SpName = (CA as XmlElement).GetAttribute("SpName").ToString();
+                        AttributesOfChart.ChartType = (CA as XmlElement).GetAttribute("ChartType").ToString();
+                        AttributesOfChart.ChartTitle = (CA as XmlElement).GetAttribute("ChartTitle").ToString();
+                        AttributesOfChart.ValueType = (CA as XmlElement).GetAttribute("ValueType").ToString();
+                        AttributesOfChart.Name = (CA as XmlElement).GetAttribute("Name").ToString();
+                        AttributesOfChart.XName = (CA as XmlElement).GetAttribute("XName").ToString();
+                        AttributesOfChart.YName = (CA as XmlElement).GetAttribute("YName").ToString();
+                    }
+                }
             }
         }
 
