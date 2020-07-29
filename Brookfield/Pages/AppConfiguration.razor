@@ -30,7 +30,9 @@ else
                         string Xml = ((string)(context as IDictionary<string, object>)["Xml"]);
                         string ConnectionString = ((string)(context as IDictionary<string, object>)["ConnectionString"]);
                         string ScreenName = ((string)(context as IDictionary<string, object>)["ScreenName"]);
-                        <a href="#" @onclick="@(() => OnClick(ScreenName,ConnectionString,Xml))">
+                        string _ProviderName = ((string)(context as IDictionary<string, object>)["ProviderName"]); //ProviderName
+
+                        <a href="#" @onclick="@(() => OnClick(ScreenName,ConnectionString,Xml,_ProviderName))">
                             Check
                         </a>
                     }
@@ -38,12 +40,12 @@ else
             </GridColumn>
         </GridColumns>
     </SfGrid>
-    
+
     @code {
         //...
-        void OnClick(string screen, string conn, string xml)
-        {          
-           urihelper.NavigateTo("/DynamicView/?xml=" + xml + "&ConnString=" + conn + "&Tital=" + screen);
+        void OnClick(string screen, string conn, string xml, string _ProviderName)
+        {
+            urihelper.NavigateTo("/DynamicView/?xml=" + xml + "&ConnString=" + conn + "&Tital=" + screen + "&ProviderName=" + _ProviderName);
         }
     }
 }

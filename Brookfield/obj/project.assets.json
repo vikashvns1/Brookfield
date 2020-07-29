@@ -230,6 +230,30 @@
           "lib/netstandard2.0/Microsoft.Net.Http.Headers.dll": {}
         }
       },
+      "Microsoft.NETCore.Platforms/1.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
+        }
+      },
+      "NETStandard.Library/2.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "build": {
+          "build/netstandard2.0/_._": {}
+        }
+      },
       "Newtonsoft.Json/12.0.1": {
         "type": "package",
         "compile": {
@@ -239,14 +263,16 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
-      "Syncfusion.Blazor/18.1.0.55": {
+      "Syncfusion.Blazor/18.2.0.44": {
         "type": "package",
         "dependencies": {
           "Microsoft.AspNetCore.Components.Web": "3.1.4",
           "Microsoft.AspNetCore.Http": "2.2.2",
           "Microsoft.CSharp": "4.5.0",
           "Newtonsoft.Json": "12.0.1",
-          "Syncfusion.Licensing": "18.1.0.55"
+          "Syncfusion.ExcelExport.Net.Core": "18.2.0.44",
+          "Syncfusion.Licensing": "18.2.0.44",
+          "Syncfusion.PdfExport.Net.Core": "18.2.0.44"
         },
         "compile": {
           "lib/netcoreapp3.1/Syncfusion.Blazor.dll": {}
@@ -261,13 +287,37 @@
           "buildMultiTargeting/Syncfusion.Blazor.props": {}
         }
       },
-      "Syncfusion.Licensing/18.1.0.55": {
+      "Syncfusion.ExcelExport.Net.Core/18.2.0.44": {
         "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "2.0.0"
+        },
         "compile": {
-          "lib/netcoreapp3.0/Syncfusion.Licensing.dll": {}
+          "lib/netstandard2.0/Syncfusion.ExcelExport.Net.dll": {}
         },
         "runtime": {
-          "lib/netcoreapp3.0/Syncfusion.Licensing.dll": {}
+          "lib/netstandard2.0/Syncfusion.ExcelExport.Net.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/18.2.0.44": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.1/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.PdfExport.Net.Core/18.2.0.44": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "2.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.PdfExport.Net.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.PdfExport.Net.dll": {}
         }
       },
       "System.Buffers/4.5.0": {
@@ -657,6 +707,151 @@
         "microsoft.net.http.headers.nuspec"
       ]
     },
+    "Microsoft.NETCore.Platforms/1.1.0": {
+      "sha512": "kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
+      "type": "package",
+      "path": "microsoft.netcore.platforms/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/netstandard1.0/_._",
+        "microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+        "microsoft.netcore.platforms.nuspec",
+        "runtime.json"
+      ]
+    },
+    "NETStandard.Library/2.0.0": {
+      "sha512": "7jnbRU+L08FXKMxqUflxEXtVymWvNOrS8yHgu9s6EM8Anr6T/wIX4nZ08j/u3Asz+tCufp3YVwFSEvFTPYmBPA==",
+      "type": "package",
+      "path": "netstandard.library/2.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "build/NETStandard.Library.targets",
+        "build/netstandard2.0/NETStandard.Library.targets",
+        "build/netstandard2.0/ref/Microsoft.Win32.Primitives.dll",
+        "build/netstandard2.0/ref/System.AppContext.dll",
+        "build/netstandard2.0/ref/System.Collections.Concurrent.dll",
+        "build/netstandard2.0/ref/System.Collections.NonGeneric.dll",
+        "build/netstandard2.0/ref/System.Collections.Specialized.dll",
+        "build/netstandard2.0/ref/System.Collections.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.Composition.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.EventBasedAsync.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.Primitives.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.TypeConverter.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.dll",
+        "build/netstandard2.0/ref/System.Console.dll",
+        "build/netstandard2.0/ref/System.Core.dll",
+        "build/netstandard2.0/ref/System.Data.Common.dll",
+        "build/netstandard2.0/ref/System.Data.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Contracts.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Debug.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.FileVersionInfo.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Process.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.StackTrace.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.TextWriterTraceListener.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Tools.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.TraceSource.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Tracing.dll",
+        "build/netstandard2.0/ref/System.Drawing.Primitives.dll",
+        "build/netstandard2.0/ref/System.Drawing.dll",
+        "build/netstandard2.0/ref/System.Dynamic.Runtime.dll",
+        "build/netstandard2.0/ref/System.Globalization.Calendars.dll",
+        "build/netstandard2.0/ref/System.Globalization.Extensions.dll",
+        "build/netstandard2.0/ref/System.Globalization.dll",
+        "build/netstandard2.0/ref/System.IO.Compression.FileSystem.dll",
+        "build/netstandard2.0/ref/System.IO.Compression.ZipFile.dll",
+        "build/netstandard2.0/ref/System.IO.Compression.dll",
+        "build/netstandard2.0/ref/System.IO.FileSystem.DriveInfo.dll",
+        "build/netstandard2.0/ref/System.IO.FileSystem.Primitives.dll",
+        "build/netstandard2.0/ref/System.IO.FileSystem.Watcher.dll",
+        "build/netstandard2.0/ref/System.IO.FileSystem.dll",
+        "build/netstandard2.0/ref/System.IO.IsolatedStorage.dll",
+        "build/netstandard2.0/ref/System.IO.MemoryMappedFiles.dll",
+        "build/netstandard2.0/ref/System.IO.Pipes.dll",
+        "build/netstandard2.0/ref/System.IO.UnmanagedMemoryStream.dll",
+        "build/netstandard2.0/ref/System.IO.dll",
+        "build/netstandard2.0/ref/System.Linq.Expressions.dll",
+        "build/netstandard2.0/ref/System.Linq.Parallel.dll",
+        "build/netstandard2.0/ref/System.Linq.Queryable.dll",
+        "build/netstandard2.0/ref/System.Linq.dll",
+        "build/netstandard2.0/ref/System.Net.Http.dll",
+        "build/netstandard2.0/ref/System.Net.NameResolution.dll",
+        "build/netstandard2.0/ref/System.Net.NetworkInformation.dll",
+        "build/netstandard2.0/ref/System.Net.Ping.dll",
+        "build/netstandard2.0/ref/System.Net.Primitives.dll",
+        "build/netstandard2.0/ref/System.Net.Requests.dll",
+        "build/netstandard2.0/ref/System.Net.Security.dll",
+        "build/netstandard2.0/ref/System.Net.Sockets.dll",
+        "build/netstandard2.0/ref/System.Net.WebHeaderCollection.dll",
+        "build/netstandard2.0/ref/System.Net.WebSockets.Client.dll",
+        "build/netstandard2.0/ref/System.Net.WebSockets.dll",
+        "build/netstandard2.0/ref/System.Net.dll",
+        "build/netstandard2.0/ref/System.Numerics.dll",
+        "build/netstandard2.0/ref/System.ObjectModel.dll",
+        "build/netstandard2.0/ref/System.Reflection.Extensions.dll",
+        "build/netstandard2.0/ref/System.Reflection.Primitives.dll",
+        "build/netstandard2.0/ref/System.Reflection.dll",
+        "build/netstandard2.0/ref/System.Resources.Reader.dll",
+        "build/netstandard2.0/ref/System.Resources.ResourceManager.dll",
+        "build/netstandard2.0/ref/System.Resources.Writer.dll",
+        "build/netstandard2.0/ref/System.Runtime.CompilerServices.VisualC.dll",
+        "build/netstandard2.0/ref/System.Runtime.Extensions.dll",
+        "build/netstandard2.0/ref/System.Runtime.Handles.dll",
+        "build/netstandard2.0/ref/System.Runtime.InteropServices.RuntimeInformation.dll",
+        "build/netstandard2.0/ref/System.Runtime.InteropServices.dll",
+        "build/netstandard2.0/ref/System.Runtime.Numerics.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.Formatters.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.Json.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.Primitives.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.Xml.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.dll",
+        "build/netstandard2.0/ref/System.Runtime.dll",
+        "build/netstandard2.0/ref/System.Security.Claims.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.Algorithms.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.Csp.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.Encoding.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.Primitives.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.X509Certificates.dll",
+        "build/netstandard2.0/ref/System.Security.Principal.dll",
+        "build/netstandard2.0/ref/System.Security.SecureString.dll",
+        "build/netstandard2.0/ref/System.ServiceModel.Web.dll",
+        "build/netstandard2.0/ref/System.Text.Encoding.Extensions.dll",
+        "build/netstandard2.0/ref/System.Text.Encoding.dll",
+        "build/netstandard2.0/ref/System.Text.RegularExpressions.dll",
+        "build/netstandard2.0/ref/System.Threading.Overlapped.dll",
+        "build/netstandard2.0/ref/System.Threading.Tasks.Parallel.dll",
+        "build/netstandard2.0/ref/System.Threading.Tasks.dll",
+        "build/netstandard2.0/ref/System.Threading.Thread.dll",
+        "build/netstandard2.0/ref/System.Threading.ThreadPool.dll",
+        "build/netstandard2.0/ref/System.Threading.Timer.dll",
+        "build/netstandard2.0/ref/System.Threading.dll",
+        "build/netstandard2.0/ref/System.Transactions.dll",
+        "build/netstandard2.0/ref/System.ValueTuple.dll",
+        "build/netstandard2.0/ref/System.Web.dll",
+        "build/netstandard2.0/ref/System.Windows.dll",
+        "build/netstandard2.0/ref/System.Xml.Linq.dll",
+        "build/netstandard2.0/ref/System.Xml.ReaderWriter.dll",
+        "build/netstandard2.0/ref/System.Xml.Serialization.dll",
+        "build/netstandard2.0/ref/System.Xml.XDocument.dll",
+        "build/netstandard2.0/ref/System.Xml.XPath.XDocument.dll",
+        "build/netstandard2.0/ref/System.Xml.XPath.dll",
+        "build/netstandard2.0/ref/System.Xml.XmlDocument.dll",
+        "build/netstandard2.0/ref/System.Xml.XmlSerializer.dll",
+        "build/netstandard2.0/ref/System.Xml.dll",
+        "build/netstandard2.0/ref/System.dll",
+        "build/netstandard2.0/ref/mscorlib.dll",
+        "build/netstandard2.0/ref/netstandard.dll",
+        "build/netstandard2.0/ref/netstandard.xml",
+        "lib/netstandard1.0/_._",
+        "netstandard.library.2.0.0.nupkg.sha512",
+        "netstandard.library.nuspec"
+      ]
+    },
     "Newtonsoft.Json/12.0.1": {
       "sha512": "pBR3wCgYWZGiaZDYP+HHYnalVnPJlpP1q55qvVb+adrDHmFMDc1NAKio61xTwftK3Pw5h7TZJPJEEVMd6ty8rg==",
       "type": "package",
@@ -696,10 +891,10 @@
         "newtonsoft.json.nuspec"
       ]
     },
-    "Syncfusion.Blazor/18.1.0.55": {
-      "sha512": "pDS8+CdiGtmEphwOB7wVyUETzNKDfcWBYiQKp5vcmOi2ARtDYAlButpe50PCZVX42/iMkpfMQLno5MnROpUQ8g==",
+    "Syncfusion.Blazor/18.2.0.44": {
+      "sha512": "UoTKazbXw4oZ89moRgDCz62ylSCv9Lx6gCrgp6oWbWfncRA56kny0VpvZ5OIlOAMTc8RwvrZh5bvKWbdTyYbhg==",
       "type": "package",
-      "path": "syncfusion.blazor/18.1.0.55",
+      "path": "syncfusion.blazor/18.2.0.44",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -711,46 +906,110 @@
         "lib/netcoreapp3.1/Syncfusion.Blazor.xml",
         "lib/netstandard2.1/Syncfusion.Blazor.dll",
         "lib/netstandard2.1/Syncfusion.Blazor.xml",
-        "staticwebassets/scripts/barcodegenerator-d2f3cb.min.js",
-        "staticwebassets/scripts/buttons-d2f3cb.min.js",
-        "staticwebassets/scripts/calendars-d2f3cb.min.js",
-        "staticwebassets/scripts/charts-d2f3cb.min.js",
-        "staticwebassets/scripts/circulargauge-d2f3cb.min.js",
-        "staticwebassets/scripts/compression-d2f3cb.min.js",
-        "staticwebassets/scripts/data-d2f3cb.min.js",
-        "staticwebassets/scripts/diagrams-d2f3cb.min.js",
-        "staticwebassets/scripts/documenteditor-d2f3cb.min.js",
-        "staticwebassets/scripts/drawings-d2f3cb.min.js",
-        "staticwebassets/scripts/dropdowns-d2f3cb.min.js",
-        "staticwebassets/scripts/excelexport-d2f3cb.min.js",
-        "staticwebassets/scripts/filemanager-d2f3cb.min.js",
-        "staticwebassets/scripts/fileutils-d2f3cb.min.js",
-        "staticwebassets/scripts/gantt-d2f3cb.min.js",
-        "staticwebassets/scripts/grids-d2f3cb.min.js",
-        "staticwebassets/scripts/heatmap-d2f3cb.min.js",
-        "staticwebassets/scripts/inplaceeditor-d2f3cb.min.js",
-        "staticwebassets/scripts/inputs-d2f3cb.min.js",
-        "staticwebassets/scripts/kanban-d2f3cb.min.js",
-        "staticwebassets/scripts/layouts-d2f3cb.min.js",
-        "staticwebassets/scripts/lineargauge-d2f3cb.min.js",
-        "staticwebassets/scripts/lists-d2f3cb.min.js",
-        "staticwebassets/scripts/maps-d2f3cb.min.js",
-        "staticwebassets/scripts/navigations-d2f3cb.min.js",
-        "staticwebassets/scripts/notifications-d2f3cb.min.js",
-        "staticwebassets/scripts/officechart-d2f3cb.min.js",
-        "staticwebassets/scripts/pdfexport-d2f3cb.min.js",
-        "staticwebassets/scripts/pdfviewer-d2f3cb.min.js",
-        "staticwebassets/scripts/pivotview-d2f3cb.min.js",
-        "staticwebassets/scripts/popups-d2f3cb.min.js",
-        "staticwebassets/scripts/progressbar-d2f3cb.min.js",
-        "staticwebassets/scripts/querybuilder-d2f3cb.min.js",
-        "staticwebassets/scripts/richtexteditor-d2f3cb.min.js",
-        "staticwebassets/scripts/schedule-d2f3cb.min.js",
-        "staticwebassets/scripts/splitbuttons-d2f3cb.min.js",
-        "staticwebassets/scripts/svgbase-d2f3cb.min.js",
+        "staticwebassets/scripts/accordion-b58c64.min.js",
+        "staticwebassets/scripts/accumulationchart-b58c64.min.js",
+        "staticwebassets/scripts/autocomplete-b58c64.min.js",
+        "staticwebassets/scripts/barcodegenerator-b58c64.min.js",
+        "staticwebassets/scripts/bulletchart-b58c64.min.js",
+        "staticwebassets/scripts/button-b58c64.min.js",
+        "staticwebassets/scripts/buttonsbase-b58c64.min.js",
+        "staticwebassets/scripts/calendar-b58c64.min.js",
+        "staticwebassets/scripts/chart-b58c64.min.js",
+        "staticwebassets/scripts/charts-b58c64.min.js",
+        "staticwebassets/scripts/chartsbase-b58c64.min.js",
+        "staticwebassets/scripts/checkbox-b58c64.min.js",
+        "staticwebassets/scripts/chiplist-b58c64.min.js",
+        "staticwebassets/scripts/circulargauge-b58c64.min.js",
+        "staticwebassets/scripts/colorpicker-b58c64.min.js",
+        "staticwebassets/scripts/combobox-b58c64.min.js",
+        "staticwebassets/scripts/compression-b58c64.min.js",
+        "staticwebassets/scripts/contextmenu-b58c64.min.js",
+        "staticwebassets/scripts/dashboardlayout-b58c64.min.js",
+        "staticwebassets/scripts/data-b58c64.min.js",
+        "staticwebassets/scripts/datepicker-b58c64.min.js",
+        "staticwebassets/scripts/daterangepicker-b58c64.min.js",
+        "staticwebassets/scripts/datetimepicker-b58c64.min.js",
+        "staticwebassets/scripts/diagrams-b58c64.min.js",
+        "staticwebassets/scripts/dialog-b58c64.min.js",
+        "staticwebassets/scripts/documenteditor-b58c64.min.js",
+        "staticwebassets/scripts/documenteditorbase-b58c64.min.js",
+        "staticwebassets/scripts/documenteditorcontainer-b58c64.min.js",
+        "staticwebassets/scripts/drawings-b58c64.min.js",
+        "staticwebassets/scripts/dropdownbutton-b58c64.min.js",
+        "staticwebassets/scripts/dropdownlist-b58c64.min.js",
+        "staticwebassets/scripts/dropdownsbase-b58c64.min.js",
+        "staticwebassets/scripts/dropdowntree-b58c64.min.js",
+        "staticwebassets/scripts/excelexport-b58c64.min.js",
+        "staticwebassets/scripts/filemanager-b58c64.min.js",
+        "staticwebassets/scripts/fileutils-b58c64.min.js",
+        "staticwebassets/scripts/formvalidator-b58c64.min.js",
+        "staticwebassets/scripts/gantt-b58c64.min.js",
+        "staticwebassets/scripts/grid-b58c64.min.js",
+        "staticwebassets/scripts/heatmap-b58c64.min.js",
+        "staticwebassets/scripts/inplaceeditor-b58c64.min.js",
+        "staticwebassets/scripts/inputsbase-b58c64.min.js",
+        "staticwebassets/scripts/kanban-b58c64.min.js",
+        "staticwebassets/scripts/lineargauge-b58c64.min.js",
+        "staticwebassets/scripts/listbox-b58c64.min.js",
+        "staticwebassets/scripts/listsbase-b58c64.min.js",
+        "staticwebassets/scripts/listview-b58c64.min.js",
+        "staticwebassets/scripts/maps-b58c64.min.js",
+        "staticwebassets/scripts/maskedtextbox-b58c64.min.js",
+        "staticwebassets/scripts/menu-b58c64.min.js",
+        "staticwebassets/scripts/multiselect-b58c64.min.js",
+        "staticwebassets/scripts/navigationsbase-b58c64.min.js",
+        "staticwebassets/scripts/numerictextbox-b58c64.min.js",
+        "staticwebassets/scripts/officechart-b58c64.min.js",
+        "staticwebassets/scripts/pager-b58c64.min.js",
+        "staticwebassets/scripts/pdfexport-b58c64.min.js",
+        "staticwebassets/scripts/pdfviewer-b58c64.min.js",
+        "staticwebassets/scripts/pdfviewerbase-b58c64.min.js",
+        "staticwebassets/scripts/pivotview-b58c64.min.js",
+        "staticwebassets/scripts/popup-b58c64.min.js",
+        "staticwebassets/scripts/popupsbase-b58c64.min.js",
+        "staticwebassets/scripts/progressbar-b58c64.min.js",
+        "staticwebassets/scripts/progressbutton-b58c64.min.js",
+        "staticwebassets/scripts/querybuilder-b58c64.min.js",
+        "staticwebassets/scripts/radiobutton-b58c64.min.js",
+        "staticwebassets/scripts/rangenavigator-b58c64.min.js",
+        "staticwebassets/scripts/richtexteditor-b58c64.min.js",
+        "staticwebassets/scripts/schedule-b58c64.min.js",
+        "staticwebassets/scripts/sf-barcode-b58c64.min.js",
+        "staticwebassets/scripts/sf-calendarbase-b58c64.min.js",
+        "staticwebassets/scripts/sf-contextmenu-b58c64.min.js",
+        "staticwebassets/scripts/sf-datepicker-b58c64.min.js",
+        "staticwebassets/scripts/sf-dialog-b58c64.min.js",
+        "staticwebassets/scripts/sf-drop-down-button-b58c64.min.js",
+        "staticwebassets/scripts/sf-grid-b58c64.min.js",
+        "staticwebassets/scripts/sf-numerictextbox-b58c64.min.js",
+        "staticwebassets/scripts/sf-splitter-b58c64.min.js",
+        "staticwebassets/scripts/sf-tab-b58c64.min.js",
+        "staticwebassets/scripts/sf-textbox-b58c64.min.js",
+        "staticwebassets/scripts/sf-toolbar-b58c64.min.js",
+        "staticwebassets/scripts/sf-tooltip-b58c64.min.js",
+        "staticwebassets/scripts/sf-treegrid-b58c64.min.js",
+        "staticwebassets/scripts/sidebar-b58c64.min.js",
+        "staticwebassets/scripts/slider-b58c64.min.js",
+        "staticwebassets/scripts/smithchart-b58c64.min.js",
+        "staticwebassets/scripts/sparkline-b58c64.min.js",
+        "staticwebassets/scripts/spinner-b58c64.min.js",
+        "staticwebassets/scripts/splitbutton-b58c64.min.js",
+        "staticwebassets/scripts/splitbuttonsbase-b58c64.min.js",
+        "staticwebassets/scripts/splitter-b58c64.min.js",
+        "staticwebassets/scripts/stockchart-b58c64.min.js",
+        "staticwebassets/scripts/svgbase-b58c64.min.js",
+        "staticwebassets/scripts/switch-b58c64.min.js",
         "staticwebassets/scripts/syncfusion-blazor.min.js",
-        "staticwebassets/scripts/treegrid-d2f3cb.min.js",
-        "staticwebassets/scripts/treemap-d2f3cb.min.js",
+        "staticwebassets/scripts/tab-b58c64.min.js",
+        "staticwebassets/scripts/textbox-b58c64.min.js",
+        "staticwebassets/scripts/timepicker-b58c64.min.js",
+        "staticwebassets/scripts/toast-b58c64.min.js",
+        "staticwebassets/scripts/toolbar-b58c64.min.js",
+        "staticwebassets/scripts/tooltip-b58c64.min.js",
+        "staticwebassets/scripts/treegrid-b58c64.min.js",
+        "staticwebassets/scripts/treemap-b58c64.min.js",
+        "staticwebassets/scripts/treeview-b58c64.min.js",
+        "staticwebassets/scripts/uploader-b58c64.min.js",
         "staticwebassets/styles/bootstrap-dark.css",
         "staticwebassets/styles/bootstrap.css",
         "staticwebassets/styles/bootstrap4.css",
@@ -759,14 +1018,27 @@
         "staticwebassets/styles/highcontrast.css",
         "staticwebassets/styles/material-dark.css",
         "staticwebassets/styles/material.css",
-        "syncfusion.blazor.18.1.0.55.nupkg.sha512",
+        "syncfusion.blazor.18.2.0.44.nupkg.sha512",
         "syncfusion.blazor.nuspec"
       ]
     },
-    "Syncfusion.Licensing/18.1.0.55": {
-      "sha512": "sBfti5z/b8+ahF8hFJqRNQtPRiCH4FJ3t0MGuHG8FlLxN5dQsdkKSe9I2qIDbmcbTLUEY6AshYYs5pI011Gwog==",
+    "Syncfusion.ExcelExport.Net.Core/18.2.0.44": {
+      "sha512": "lYegCNjp0rs9vEwtFqiIZUM9NKvmv+ihJQsMKNOWOO05JVsV0xA30s8g/C5bY0DUUSq9npHXvhFXMt+C0EUvUA==",
       "type": "package",
-      "path": "syncfusion.licensing/18.1.0.55",
+      "path": "syncfusion.excelexport.net.core/18.2.0.44",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Syncfusion.ExcelExport.Net.dll",
+        "lib/netstandard2.0/Syncfusion.ExcelExport.Net.xml",
+        "syncfusion.excelexport.net.core.18.2.0.44.nupkg.sha512",
+        "syncfusion.excelexport.net.core.nuspec"
+      ]
+    },
+    "Syncfusion.Licensing/18.2.0.44": {
+      "sha512": "cbP6Dq/syAKpB0+fS4DAqVG7xsoFJ2DAHW5U/lDFBuHV/i/C+zLXzG8jVBgnPpJVZ/Q1sfcqscVKflLH/lGoRw==",
+      "type": "package",
+      "path": "syncfusion.licensing/18.2.0.44",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -779,15 +1051,29 @@
         "lib/net45/Syncfusion.Licensing.dll",
         "lib/net451/Syncfusion.Licensing.dll",
         "lib/net46/Syncfusion.Licensing.dll",
-        "lib/netcoreapp3.0/Syncfusion.Licensing.dll",
+        "lib/netcoreapp3.1/Syncfusion.Licensing.dll",
+        "lib/netcoreapp5.0/Syncfusion.Licensing.dll",
         "lib/netstandard1.0/Syncfusion.Licensing.dll",
         "lib/netstandard1.2/Syncfusion.Licensing.dll",
         "lib/netstandard1.4/Syncfusion.Licensing.dll",
         "lib/netstandard2.0/Syncfusion.Licensing.dll",
         "lib/portable-win+net45+wp80+win81+wpa81/Syncfusion.Licensing.dll",
         "lib/uap10.0/Syncfusion.Licensing.dll",
-        "syncfusion.licensing.18.1.0.55.nupkg.sha512",
+        "syncfusion.licensing.18.2.0.44.nupkg.sha512",
         "syncfusion.licensing.nuspec"
+      ]
+    },
+    "Syncfusion.PdfExport.Net.Core/18.2.0.44": {
+      "sha512": "i6yis//v6lSi354F4nEiveFbFQablYCEDEal/xAy/9IHKDEArkDfy05MKesGgDyaRsDCEPSYdNsoZXaPLgH6Cw==",
+      "type": "package",
+      "path": "syncfusion.pdfexport.net.core/18.2.0.44",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Syncfusion.PdfExport.Net.dll",
+        "lib/netstandard2.0/Syncfusion.PdfExport.Net.xml",
+        "syncfusion.pdfexport.net.core.18.2.0.44.nupkg.sha512",
+        "syncfusion.pdfexport.net.core.nuspec"
       ]
     },
     "System.Buffers/4.5.0": {
@@ -864,7 +1150,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "Microsoft.AspNetCore.Blazor.HttpClient >= 3.2.0-preview3.20168.3",
-      "Syncfusion.Blazor >= 18.1.0.55"
+      "Syncfusion.Blazor >= 18.2.0.44"
     ]
   },
   "packageFolders": {
@@ -915,7 +1201,7 @@
           },
           "Syncfusion.Blazor": {
             "target": "Package",
-            "version": "[18.1.0.55, )"
+            "version": "[18.2.0.44, )"
           }
         },
         "imports": [

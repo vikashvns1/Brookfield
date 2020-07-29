@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "LRauKIER8HMiO37YDZWBBVtFRQPsqkCZ1HXKymWhtj6AUI9YF03x7GOIAbmfd9J/K2DUMSYlsdSskVVWvLR0OA==",
+  "dgSpecHash": "HRtB6qrc9FftHRXukK5rfxshEj1ZAw5ooJEerHwRtSoJPT2O+jDQvBCRDvgondlX/bNYbT0LDaUztYfq4hmjaw==",
   "success": true,
   "projectFilePath": "D:\\BlazorPoc\\Brookfield\\Brookfield\\Brookfield.csproj",
   "expectedPackageFiles": [
@@ -24,9 +24,13 @@
     "C:\\Users\\Vikash\\.nuget\\packages\\microsoft.extensions.primitives\\3.1.4\\microsoft.extensions.primitives.3.1.4.nupkg.sha512",
     "C:\\Users\\Vikash\\.nuget\\packages\\microsoft.jsinterop\\3.1.4\\microsoft.jsinterop.3.1.4.nupkg.sha512",
     "C:\\Users\\Vikash\\.nuget\\packages\\microsoft.net.http.headers\\2.2.0\\microsoft.net.http.headers.2.2.0.nupkg.sha512",
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Vikash\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
     "C:\\Users\\Vikash\\.nuget\\packages\\newtonsoft.json\\12.0.1\\newtonsoft.json.12.0.1.nupkg.sha512",
-    "C:\\Users\\Vikash\\.nuget\\packages\\syncfusion.blazor\\18.1.0.55\\syncfusion.blazor.18.1.0.55.nupkg.sha512",
-    "C:\\Users\\Vikash\\.nuget\\packages\\syncfusion.licensing\\18.1.0.55\\syncfusion.licensing.18.1.0.55.nupkg.sha512",
+    "C:\\Users\\Vikash\\.nuget\\packages\\syncfusion.blazor\\18.2.0.44\\syncfusion.blazor.18.2.0.44.nupkg.sha512",
+    "C:\\Users\\Vikash\\.nuget\\packages\\syncfusion.excelexport.net.core\\18.2.0.44\\syncfusion.excelexport.net.core.18.2.0.44.nupkg.sha512",
+    "C:\\Users\\Vikash\\.nuget\\packages\\syncfusion.licensing\\18.2.0.44\\syncfusion.licensing.18.2.0.44.nupkg.sha512",
+    "C:\\Users\\Vikash\\.nuget\\packages\\syncfusion.pdfexport.net.core\\18.2.0.44\\syncfusion.pdfexport.net.core.18.2.0.44.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.buffers\\4.5.0\\system.buffers.4.5.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.text.encodings.web\\4.5.0\\system.text.encodings.web.4.5.0.nupkg.sha512",
     "C:\\Users\\Vikash\\.nuget\\packages\\system.text.json\\4.7.1\\system.text.json.4.7.1.nupkg.sha512",

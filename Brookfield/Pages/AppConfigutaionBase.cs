@@ -23,8 +23,9 @@ namespace Brookfield.Pages
         {
             string conn = "Data Source=DESKTOP-97IJ0BQ;Initial Catalog=Inventory;Integrated Security=True;Timeout=90;User Id=sa;Password=abc123;";
             string storeProc = "GetAppConfiguration";
+            string ProviderName = "System.Data.SqlClient";
             string jsonstring = string.Empty;
-            jsonstring = (await dynamicAPIService.GetAppConfiguration(conn,storeProc,"AppConfig"));
+            jsonstring = (await dynamicAPIService.GetAppConfiguration(conn,storeProc,"AppConfig",ProviderName));
             appConfiguration = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
             dtList = (DataTable)JsonConvert.DeserializeObject(jsonstring, (typeof(DataTable)));          
         }

@@ -10,8 +10,8 @@ namespace Brookfield.Services
 {
    public interface IDynamicAPIService
     {
-        Task<string> GetAppConfiguration(string connection,string spName,string action);
-        Task<string> InsertData(ExpandoObject obj, string connection, string spName, string action);
-        Task<string> GetDatabyParam(List<Param> obj, string connection, string spName, string action);
+        Task<string> GetAppConfiguration(string connection,string spName,string action, string ProviderName);
+        Task<string> InsertData(ExpandoObject obj, string connection, string spName, string action, string ProviderName);
+        Task<string> GetDatabyParam(List<Param> obj, string connection, string spName, string action, string ProviderName);
     }
 }

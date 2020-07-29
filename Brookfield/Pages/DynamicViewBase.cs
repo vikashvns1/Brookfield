@@ -31,6 +31,7 @@ namespace Brookfield.Pages
         public List<Param> ParamList { get; set; }
         public List<Column> ColumnList { get; set; }
         public string ConnString { get; set; }
+        public string ProviderName { get; set; }
         public string StoreProcedure { get; set; }
         public string Action { get; set; }
         public string Tital { get; set; }
@@ -73,7 +74,7 @@ namespace Brookfield.Pages
             ReadQueryString();
             if (ParamList.Count == 0)
             {
-                string jsonstring = (await DynamicAPIService.GetAppConfiguration(ConnString, StoreProcedure, "Select"));
+                string jsonstring = (await DynamicAPIService.GetAppConfiguration(ConnString, StoreProcedure, "Select",ProviderName));
                 DynamicObject = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonstring);
                 if (IsInitialRenderGrid == false)
                 {
@@ -89,7 +90,7 @@ namespace Brookfield.Pages
                     if (IsInitialRenderChart == false)
                     {
                         IsInitialRenderChart = true;
-                        string jsonChartstring = (await DynamicAPIService.GetAppConfiguration(ConnString, AttributesOfChart.SpName, "Select"));
+                        string jsonChartstring = (await DynamicAPIService.GetAppConfiguration(ConnString, AttributesOfChart.SpName, "Select",ProviderName));
                         ChartDataObj = JsonConvert.DeserializeObject<ObservableCollection<ExpandoObject>>(jsonChartstring);
                         //ChartdataTable = (DataTable)JsonConvert.DeserializeObject(jsonChartstring, (typeof(DataTable)));
                     }
@@ -122,9 +123,10 @@ namespace Brookfield.Pages
                 args.Cancel = true;
                 if (args.Action == "add")
                 {
-                    string jsonstring = await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Insert");
+                    string jsonstring = await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Insert",ProviderName);
                     OutputData exObj = JsonConvert.DeserializeObject<OutputData>(jsonstring);
                     DynamicObject.Add(exObj.DynamicData[0]);
+                    RowsCount = DynamicObject.Count.ToString();
                     this.DlgRef.Visible = true;
                     this.DlgRef.Show();
                     PopHeadarMsg = "Insert";
@@ -133,7 +135,7 @@ namespace Brookfield.Pages
                 else
                 {
                     int index =Convert.ToInt32(args.RowIndex);
-                    string jsonstring = await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Update");
+                    string jsonstring = await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Update", ProviderName);
                     OutputData exObj = JsonConvert.DeserializeObject<OutputData>(jsonstring);
                     DynamicObject[index]=args.Data;
                     this.DlgRef.Visible = true;
@@ -146,8 +148,10 @@ namespace Brookfield.Pages
             else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
             {
                 //args.Cancel = true;
-                string jsonstring =await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Delete");
+                string jsonstring =await DynamicAPIService.InsertData(args.Data, ConnString, StoreProcedure, "Delete",ProviderName);
                 OutputData exObj = JsonConvert.DeserializeObject<OutputData>(jsonstring);
+                RowsCount = (DynamicObject.Count-1).ToString();
+
                 //int index = Convert.ToInt32(args.RowIndex);               
                 //DynamicObject.Remove(exObj.DynamicData[0]);               
                 this.DlgRef.Visible = true;
@@ -171,7 +175,10 @@ namespace Brookfield.Pages
             {
                 ConnString = conn;
             }
-
+            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("ProviderName", out var providername))
+            {
+                ProviderName = providername;
+            }
             if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Tital", out var tital))
             {
                 Tital = tital;

@@ -24,6 +24,7 @@
     ".NETCoreApp,Version=v3.1": {
       "DynamicWebAPI/1.0.0": {
         "dependencies": {
+          "DataAccessHandler": "1.0.0",
           "System.Data.SqlClient": "4.8.1",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "3.1.0.0",
@@ -384,6 +385,14 @@
         }
       },
       "System.Security.Principal.Windows/4.7.0": {},
+      "DataAccessHandler/1.0.0": {
+        "runtime": {
+          "DataAccessHandler.dll": {}
+        },
+        "compile": {
+          "DataAccessHandler.dll": {}
+        }
+      },
       "Microsoft.AspNetCore.Antiforgery/3.1.0.0": {
         "compile": {
           "Microsoft.AspNetCore.Antiforgery.dll": {}
@@ -2092,6 +2101,11 @@
       "sha512": "sha512-ojD0PX0XhneCsUbAZVKdb7h/70vyYMDYs85lwEI+LngEONe/17A0cFaRFqZU+sOEidcVswYWikYOQ9PPfjlbtQ==",
       "path": "system.security.principal.windows/4.7.0",
       "hashPath": "system.security.principal.windows.4.7.0.nupkg.sha512"
+    },
+    "DataAccessHandler/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "Microsoft.AspNetCore.Antiforgery/3.1.0.0": {
       "type": "referenceassembly",

@@ -130,6 +130,15 @@
             "rid": "win"
           }
         }
+      },
+      "DataAccessHandler/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/DataAccessHandler.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DataAccessHandler.dll": {}
+        }
       }
     }
   },
@@ -443,10 +452,16 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "DataAccessHandler/1.0.0": {
+      "type": "project",
+      "path": "../DataAccessHandler/DataAccessHandler.csproj",
+      "msbuildProject": "../DataAccessHandler/DataAccessHandler.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
+      "DataAccessHandler >= 1.0.0",
       "System.Data.SqlClient >= 4.8.1"
     ]
   },
@@ -480,7 +495,11 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\BlazorPoc\\Brookfield\\DataAccessHandler\\DataAccessHandler.csproj": {
+              "projectPath": "D:\\BlazorPoc\\Brookfield\\DataAccessHandler\\DataAccessHandler.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

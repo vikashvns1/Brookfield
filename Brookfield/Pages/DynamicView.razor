@@ -25,7 +25,32 @@
 
             if (item.Control == "Text")
             {
-                <Syncfusion.Blazor.Inputs.SfTextBox Type="@item.Type" @bind-Value="@item.Value" Width="150px"></Syncfusion.Blazor.Inputs.SfTextBox>
+                Syncfusion.Blazor.Inputs.InputType v;
+                switch (item.Type)
+                {
+                    case "Text":
+                        v = Syncfusion.Blazor.Inputs.InputType.Text;
+                        break;
+                    case "Email":
+                        v = Syncfusion.Blazor.Inputs.InputType.Email;
+                        break;
+                    case "Number":
+                        v = Syncfusion.Blazor.Inputs.InputType.Number;
+                        break;
+                    case "Password":
+                        v = Syncfusion.Blazor.Inputs.InputType.Password;
+                        break;
+                    case "Tel":
+                        v = Syncfusion.Blazor.Inputs.InputType.Tel;
+                        break;
+                    case "Search":
+                        v = Syncfusion.Blazor.Inputs.InputType.Search;
+                        break;
+                    default:
+                        v = Syncfusion.Blazor.Inputs.InputType.Text;
+                        break;
+                }
+                <Syncfusion.Blazor.Inputs.SfTextBox Type="@v" @bind-Value="@item.Value" Width="150px"></Syncfusion.Blazor.Inputs.SfTextBox>
             }
             else if (item.Control == "ddl")
             {
@@ -53,7 +78,7 @@
             async Task submitedata()
             {
                 string jsonstring = string.Empty;
-                jsonstring = await DynamicAPIService.GetDatabyParam(ParamList, ConnString, StoreProcedure, "Select");
+                jsonstring = await DynamicAPIService.GetDatabyParam(ParamList, ConnString, StoreProcedure, "Select", ProviderName);
                 var response = JsonConvert.DeserializeObject<Brookfield.Models.OutputData>(jsonstring);
 
                 if (response.DynamicData.Count > 0)
@@ -106,9 +131,9 @@ else
         }
 
         <SfGrid DataSource="@DynamicObject" GridLines="@GridLine.Both" @ref="DefaultGrid"
-                TValue="ExpandoObject" Toolbar="@toolbar" AllowFiltering="true"
+                TValue="ExpandoObject" Toolbar="@toolbar" AllowFiltering="true" Width="100%"
                 AllowGrouping="true" AllowMultiSorting="true" AllowSorting="true" ShowColumnChooser="true" AllowReordering="true" AllowTextWrap="true" AllowResizing="true" AllowPdfExport="true" AllowExcelExport="true">
-           <GridFilterSettings  Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
             <GridEvents OnActionBegin="ActionBeginAsync" OnToolbarClick="ToolbarClickHandler" TValue="ExpandoObject"></GridEvents>
             <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Normal" ShowConfirmDialog="true" AllowEditOnDblClick="false"></GridEditSettings>
 
@@ -127,9 +152,9 @@ else
                                 {
                                     bool _IsPrimaryKey = Colitem.IsPrimaryKey == true ? true : false;
                                     <GridColumn Field="@col.ToString()" Type="ColumnType.Number" AllowEditing="@Colitem.Edit" HeaderTextAlign="@TextAlign.Center" EditType="EditType.NumericEdit" TextAlign="@TextAlign.Right" IsIdentity="@_IsPrimaryKey" IsPrimaryKey="@Colitem.IsPrimaryKey" AllowFiltering="@Colitem.Filter" ShowInColumnChooser="true">
-                                     @if (_IsPrimaryKey == true)
-                                     { 
-                                     }
+                                        @if (_IsPrimaryKey == true)
+                                        {
+                                        }
                                     </GridColumn>
                                 }
                                 else

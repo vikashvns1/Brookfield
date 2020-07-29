@@ -62,3 +62,5 @@ D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\staticwebassets\Brook
 D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.dll
 D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.pdb
 D:\BlazorPoc\Brookfield\Brookfield\obj\Debug\netcoreapp3.1\Brookfield.genruntimeconfig.cache
+D:\BlazorPoc\Brookfield\Brookfield\bin\Debug\netcoreapp3.1\Syncfusion.ExcelExport.Net.dll
+D:\BlazorPoc\Brookfield\Brookfield\bin\Debug\netcoreapp3.1\Syncfusion.PdfExport.Net.dll

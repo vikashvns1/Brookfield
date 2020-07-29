@@ -1,0 +1,6 @@
+D:\BlazorPoc\Brookfield\DataAccessHandler\obj\Debug\DataAccessHandler.csproj.CoreCompileInputs.cache
+D:\BlazorPoc\Brookfield\DataAccessHandler\bin\Debug\DataAccessHandler.dll
+D:\BlazorPoc\Brookfield\DataAccessHandler\bin\Debug\DataAccessHandler.pdb
+D:\BlazorPoc\Brookfield\DataAccessHandler\obj\Debug\DataAccessHandler.dll
+D:\BlazorPoc\Brookfield\DataAccessHandler\obj\Debug\DataAccessHandler.pdb
+D:\BlazorPoc\Brookfield\DataAccessHandler\obj\Debug\DataAccessHandler.csprojAssemblyReference.cache
